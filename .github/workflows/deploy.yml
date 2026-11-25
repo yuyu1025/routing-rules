@@ -32,8 +32,14 @@ jobs:
       - name: Install Mihomo for .mrs binary ruleset compilation
         run: |
           set -euo pipefail
-          TAG=$(curl -fsSL https://api.github.com/repos/MetaCubeX/mihomo/releases/latest | jq -r .tag_name)
+          # Resolve the latest tag through the release redirect instead of the REST API:
+          # api.github.com is rate limited per runner IP and intermittently returns 403.
+          TAG=$(curl -fsSIL -o /dev/null -w '%{url_effective}' https://github.com/MetaCubeX/mihomo/releases/latest | sed 's#.*/tag/##')
           echo "Latest Mihomo tag: ${TAG}"
+          if [ -z "$TAG" ]; then
+            echo "::warning::Could not resolve the latest Mihomo tag, continuing without .mrs output"
+            exit 0
+          fi
           URL="https://github.com/MetaCubeX/mihomo/releases/download/${TAG}/mihomo-linux-amd64-${TAG}.gz"
           if curl -fsSL "$URL" -o mihomo.gz; then
             gunzip -f mihomo.gz
