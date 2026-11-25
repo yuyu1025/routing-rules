@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "routing-rules-proxy",
+  "main": "src/index.js",
+  "compatibility_date": "2026-01-01",
+  "observability": {
+    "enabled": true
+  },
+  "routes": [
+    {
+      "pattern": "proxy.distinctive.fun/*",
+      "zone_name": "distinctive.fun"
+    }
+  ]
+}

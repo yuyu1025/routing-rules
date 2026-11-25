@@ -2,7 +2,7 @@
   "meta": {
     "title": "Routing Rules",
     "description": "高效跨端分流规则集（Clash/Mihomo · Stash · Loon）",
-    "default_base_url": "https://yuyu1025.github.io/routing-rules"
+    "default_base_url": "https://proxy.distinctive.fun/routing"
   },
   "rulesets": [
     {

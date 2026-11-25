@@ -13,7 +13,7 @@
   - **Clash / Mihomo**：CI 自动编译 `.mrs` 二进制规则集（低内存、毫秒级加载）。
   - **Stash**：拆分 `domain` / `ipcidr` 高性能 YAML，附带 `.stoverride` 一键覆写模板。
   - **Loon**：纯净 `.list` 格式（自动剔除 iOS 不支持的规则类型），附带 `.plugin` 插件模板。
-- **自带可视化导航页**：访问 `https://<user>.github.io/<repo>/` 即可查看规则统计与一键复制各端订阅链接。
+- **自带可视化导航页**：访问 <https://proxy.distinctive.fun/routing/> 即可查看规则统计与一键复制各端订阅链接。
 
 ## 内置规则集
 
@@ -32,7 +32,28 @@
 1. 将本仓库推送到你的 GitHub（需设为 **Public** 仓库以免费使用 GitHub Pages）。
 2. 打开仓库 **Settings → Pages → Build and deployment → Source**，选择 **GitHub Actions**。
 3. 在 **Actions** 页面手动触发一次 **Build & Deploy Routing Rules**（或推送任意提交）。
-4. 部署完成后访问 `https://<你的用户名>.github.io/<仓库名>/` 即可复制规则集或客户端模板链接。
+4. 部署完成后访问 <https://proxy.distinctive.fun/routing/> 即可复制规则集或客户端模板链接。
+
+## 自定义域名
+
+正式入口是 `https://proxy.distinctive.fun/routing/`，由两部分组成：
+
+| 组件 | 作用 |
+| :--- | :--- |
+| GitHub Pages | 源站，实际构建产物部署在 `https://yuyu1025.github.io/routing-rules/`（`build_type: workflow`） |
+| Cloudflare Worker | `infra/site-proxy/`，挂在路由 `proxy.distinctive.fun/*` 上，把 `/routing/*` 反代到 GitHub Pages 的 `/routing-rules/*` |
+
+GitHub Pages 无法把项目站点挂到自定义域名的**子路径**上（自定义域名只能占根路径），所以这里用 Worker 做前缀重写；DNS 侧只需一条代理记录（`AAAA 100::`，橙云），流量由 Workers 路由接管。
+
+### 部署 / 更新代理
+
+```bash
+cd infra/site-proxy
+npm install
+CLOUDFLARE_ACCOUNT_ID=d68615c4b79a81e7cf83dff92d97560a npx wrangler deploy
+```
+
+CI 构建时通过 `--base-url https://proxy.distinctive.fun/routing` 把 manifest、模板里的绝对链接（订阅地址）统一指向自定义域名；页面内导航保持相对路径，因此在 `github.io` 与自定义域名下都能正常浏览。
 
 ## 日常维护
 

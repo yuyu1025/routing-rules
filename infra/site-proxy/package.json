@@ -1,0 +1,14 @@
+{
+  "name": "routing-rules-site-proxy",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Edge proxy exposing the routing-rules GitHub Pages build at https://proxy.distinctive.fun/routing/",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail"
+  },
+  "devDependencies": {
+    "wrangler": "^4.168.0"
+  }
+}
