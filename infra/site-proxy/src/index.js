@@ -107,6 +107,17 @@ export default {
     if (location) headers.set("location", rewriteLocation(location));
     headers.set("x-routing-rules-proxy", "1");
 
+    // GitHub Pages serves `max-age=14400`, which would let browsers cache the
+    // navigation page for four hours after a rebuild. Keep edge TTLs short and
+    // make the browser revalidate instead.
+    const contentType = headers.get("content-type") || "";
+    const isDocument =
+      contentType.includes("text/html") || contentType.includes("application/json");
+    headers.set(
+      "cache-control",
+      isDocument ? "public, max-age=60, must-revalidate" : "public, max-age=300",
+    );
+
     return new Response(request.method === "HEAD" ? null : response.body, {
       status: response.status,
       statusText: response.statusText,
