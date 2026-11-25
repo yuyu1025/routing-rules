@@ -50,8 +50,21 @@ GitHub Pages 无法把项目站点挂到自定义域名的**子路径**上（自
 ```bash
 cd infra/site-proxy
 npm install
+npx wrangler login          # 首次执行，浏览器授权后写入 ~/Library/Preferences/.wrangler
 CLOUDFLARE_ACCOUNT_ID=d68615c4b79a81e7cf83dff92d97560a npx wrangler deploy
 ```
+
+DNS 与账户（一次性，已生效）用 `cf` CLI 完成：
+
+```bash
+export CLOUDFLARE_ACCOUNT_ID=d68615c4b79a81e7cf83dff92d97560a
+cf dns records create -z distinctive.fun \
+  --body '{"type":"AAAA","name":"proxy.distinctive.fun","content":"100::","proxied":true,"ttl":1}'
+```
+
+> `cf deploy` 目前要求项目提供 `cloudflare.config.ts`（experimental new config），本项目沿用 `wrangler.jsonc`，所以直接调 `wrangler deploy`。
+
+代理只做前缀重写：`/routing/<path>` → `https://yuyu1025.github.io/routing-rules/<path>`，并把 3xx 的 `Location` 改回自定义域名；`/` 与 `/routing` 分别 302 / 301 到 `/routing/`。响应头 `cache-control` 由 Worker 重写（文档 60s、规则文件 300s），避免继承 GitHub Pages 的 `max-age=14400` 导致重建后长时间读到旧内容。
 
 CI 构建时通过 `--base-url https://proxy.distinctive.fun/routing` 把 manifest、模板里的绝对链接（订阅地址）统一指向自定义域名；页面内导航保持相对路径，因此在 `github.io` 与自定义域名下都能正常浏览。
 
