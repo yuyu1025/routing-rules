@@ -1,0 +1,116 @@
+# 自定义直连规则（最高优先级，用于覆盖误杀、兜底漏网之鱼及内网直连）
+# 构建脚本会自动做 Trie 域名剪枝、IP CIDR 聚合、拆分 domain / ip / classical
+
+# --- 内网与本地回环 ---
+DOMAIN-SUFFIX,local
+DOMAIN-SUFFIX,lan
+DOMAIN-SUFFIX,home.arpa
+IP-CIDR,127.0.0.0/8,no-resolve
+IP-CIDR,10.0.0.0/8,no-resolve
+IP-CIDR,172.16.0.0/12,no-resolve
+IP-CIDR,192.168.0.0/16,no-resolve
+IP-CIDR,100.64.0.0/10,no-resolve
+IP-CIDR6,::1/128,no-resolve
+
+# --- 关键词匹配（自动分离至 classical 规则集，不拖慢 Trie 匹配性能） ---
+DOMAIN-KEYWORD,biomap
+DOMAIN-KEYWORD,schweb
+
+# --- 顶级域名与个人/特定服务 ---
+DOMAIN-SUFFIX,cn
+DOMAIN-SUFFIX,apple
+DOMAIN-SUFFIX,tailscale.com
+DOMAIN-SUFFIX,xiandewuliao.online
+DOMAIN-SUFFIX,amazonaws.com
+
+# --- Apple / iCloud ---
+DOMAIN-SUFFIX,apple.com
+DOMAIN-SUFFIX,icloud.com
+DOMAIN-SUFFIX,icloud-content.com
+DOMAIN-SUFFIX,cdn-apple.com
+DOMAIN-SUFFIX,apple-mapkit.com
+
+# --- 字节跳动 / 抖音 / 番茄 / 豆包 / 飞书 ---
+DOMAIN-SUFFIX,douyin.com
+DOMAIN-SUFFIX,douyinpic.com
+DOMAIN-SUFFIX,douyinvod.com
+DOMAIN-SUFFIX,idouyinvod.com
+DOMAIN-SUFFIX,bytednsdoc.com
+DOMAIN-SUFFIX,byteimg.com
+DOMAIN-SUFFIX,bytetos.com
+DOMAIN-SUFFIX,bytegecko.com
+DOMAIN-SUFFIX,zijieapi.com
+DOMAIN-SUFFIX,snssdk.com
+DOMAIN-SUFFIX,volcvideo.com
+DOMAIN-SUFFIX,ecombdimg.com
+DOMAIN-SUFFIX,ecombdapi.com
+DOMAIN-SUFFIX,fqnovel.com
+DOMAIN-SUFFIX,fqnovelvod.com
+DOMAIN-SUFFIX,fqnovelpic.com
+DOMAIN-SUFFIX,doubao.com
+DOMAIN-SUFFIX,doubao-dev.com
+DOMAIN-SUFFIX,feishu.cn
+DOMAIN,lf3-short.ibytedapm.com
+
+# --- 阿里 / 淘宝 / 支付宝 / 钉钉 / 高德 / 优酷 / 千问 ---
+DOMAIN-SUFFIX,taobao.com
+DOMAIN-SUFFIX,alipay.com
+DOMAIN-SUFFIX,alipayobjects.com
+DOMAIN-SUFFIX,aliyuncs.com
+DOMAIN-SUFFIX,alibaba-inc.com
+DOMAIN-SUFFIX,alibabachengdun.com
+DOMAIN,mum.alibabachengdun.net
+DOMAIN-SUFFIX,dingtalk.com
+DOMAIN-SUFFIX,amap.com
+DOMAIN-SUFFIX,autonavi.com
+DOMAIN-SUFFIX,youku.com
+DOMAIN-SUFFIX,qianwen.com
+
+# --- 腾讯 / 微信 / 阅文 ---
+DOMAIN-SUFFIX,qq.com
+DOMAIN-SUFFIX,weixin.com
+DOMAIN-SUFFIX,tencent.com
+DOMAIN-SUFFIX,tencent-cloud.net
+DOMAIN-SUFFIX,myqcloud.com
+DOMAIN-SUFFIX,tencentmusic.com
+DOMAIN-SUFFIX,wxgateway.com
+DOMAIN-SUFFIX,servicewechat.com
+DOMAIN-SUFFIX,yuewen.com
+DOMAIN-SUFFIX,qidian.com
+
+# --- 百度 / 小米 / 京东 / 美团 / B站 / 小红书 / 知乎 / 米哈游 ---
+DOMAIN-SUFFIX,baidu.com
+DOMAIN-SUFFIX,bcebos.com
+DOMAIN-SUFFIX,nuomi.com
+DOMAIN-SUFFIX,mi.com
+DOMAIN-SUFFIX,xiaomi.net
+DOMAIN-SUFFIX,mi-img.com
+DOMAIN-SUFFIX,mijia.tech
+DOMAIN-SUFFIX,jd.com
+DOMAIN-SUFFIX,jddebug.com
+DOMAIN-SUFFIX,meituan.net
+DOMAIN-SUFFIX,bilibili.com
+DOMAIN-SUFFIX,bilivideo.com
+DOMAIN-SUFFIX,hdslb.com
+DOMAIN-SUFFIX,xiaohongshu.com
+DOMAIN-SUFFIX,xhscdn.com
+DOMAIN-SUFFIX,zhihu.com
+DOMAIN-SUFFIX,mihoyo.com
+DOMAIN-SUFFIX,miyoushe.com
+DOMAIN-SUFFIX,yximgs.com
+
+# --- 其他国内常用应用（Boss直聘 / 百词斩 / 墨墨 / 彩云 / 运营商 / Soul 等） ---
+DOMAIN-SUFFIX,zhipin.com
+DOMAIN-SUFFIX,bosszhipin.com
+DOMAIN-SUFFIX,baicizhan.com
+DOMAIN-SUFFIX,bczcdn.com
+DOMAIN-SUFFIX,maimemo.com
+DOMAIN-SUFFIX,maimemostatus.com
+DOMAIN,api.caiyunapp.com
+DOMAIN-SUFFIX,cmpassport.com
+DOMAIN-SUFFIX,easytomessage.com
+DOMAIN-SUFFIX,xinqiucc.com
+DOMAIN-SUFFIX,tianwenca.com
+DOMAIN-SUFFIX,ydycdn.com
+DOMAIN-SUFFIX,obriccloud.com
+DOMAIN-SUFFIX,soulapp.cn

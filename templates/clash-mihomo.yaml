@@ -1,0 +1,88 @@
+# Clash / Mihomo (Clash Meta) 高性能 .mrs 分流配置片段
+# 生成时间: {{UPDATED_AT}} UTC
+# 说明：将下方策略组名称（Proxy / AI / Streaming / Telegram）替换为你自己配置中的实际组名即可
+
+rule-anchor:
+  domain: &domain { type: http, interval: 86400, behavior: domain, format: mrs }
+  ip: &ip { type: http, interval: 86400, behavior: ipcidr, format: mrs }
+  classical: &classical { type: http, interval: 86400, behavior: classical, format: yaml }
+
+rule-providers:
+  # 自定义最高优先级规则（拆分为 domain/ip/classical 以保证极致匹配性能）
+  custom-direct-domain:
+    <<: *domain
+    url: "{{BASE_URL}}/mihomo/direct-domain.mrs"
+    path: ./ruleset/custom-direct-domain.mrs
+  custom-direct-ip:
+    <<: *ip
+    url: "{{BASE_URL}}/mihomo/direct-ip.mrs"
+    path: ./ruleset/custom-direct-ip.mrs
+  custom-direct-classical:
+    <<: *classical
+    url: "{{BASE_URL}}/mihomo/direct-classical.yaml"
+    path: ./ruleset/custom-direct-classical.yaml
+  custom-proxy-domain:
+    <<: *domain
+    url: "{{BASE_URL}}/mihomo/proxy-domain.mrs"
+    path: ./ruleset/custom-proxy-domain.mrs
+
+  # AI 服务
+  ai-domain:
+    <<: *domain
+    url: "{{BASE_URL}}/mihomo/ai-domain.mrs"
+    path: ./ruleset/ai-domain.mrs
+
+  # 流媒体（可直接使用合集，或按需替换为下方 youtube/netflix/disney/tiktok/spotify 独立分流）
+  streaming-domain:
+    <<: *domain
+    url: "{{BASE_URL}}/mihomo/streaming-domain.mrs"
+    path: ./ruleset/streaming-domain.mrs
+  streaming-ip:
+    <<: *ip
+    url: "{{BASE_URL}}/mihomo/streaming-ip.mrs"
+    path: ./ruleset/streaming-ip.mrs
+
+  # Telegram
+  telegram-domain:
+    <<: *domain
+    url: "{{BASE_URL}}/mihomo/telegram-domain.mrs"
+    path: ./ruleset/telegram-domain.mrs
+  telegram-ip:
+    <<: *ip
+    url: "{{BASE_URL}}/mihomo/telegram-ip.mrs"
+    path: ./ruleset/telegram-ip.mrs
+
+  # 国内直连 + 内网
+  cn-domain:
+    <<: *domain
+    url: "{{BASE_URL}}/mihomo/cn-domain.mrs"
+    path: ./ruleset/cn-domain.mrs
+  cn-ip:
+    <<: *ip
+    url: "{{BASE_URL}}/mihomo/cn-ip.mrs"
+    path: ./ruleset/cn-ip.mrs
+
+rules:
+  # 1. 自定义白名单与黑名单（最高优先级）
+  - RULE-SET,custom-direct-domain,DIRECT
+  - RULE-SET,custom-direct-classical,DIRECT
+  - RULE-SET,custom-direct-ip,DIRECT,no-resolve
+  - RULE-SET,custom-proxy-domain,Proxy
+
+  # 2. AI 服务分流
+  - RULE-SET,ai-domain,AI
+
+  # 3. 流媒体分流
+  - RULE-SET,streaming-domain,Streaming
+  - RULE-SET,streaming-ip,Streaming,no-resolve
+
+  # 4. Telegram
+  - RULE-SET,telegram-domain,Telegram
+  - RULE-SET,telegram-ip,Telegram,no-resolve
+
+  # 5. 国内直连
+  - RULE-SET,cn-domain,DIRECT
+  - RULE-SET,cn-ip,DIRECT,no-resolve
+
+  # 6. 兜底规则
+  - MATCH,Proxy

@@ -1,0 +1,27 @@
+#!name=高效分流规则集 (AI / 流媒体 / 国内直连)
+#!desc=基于 GitHub Pages 自动编译优化的统一分流规则（更新时间：{{UPDATED_AT}} UTC）。导入时请在插件参数中或配置里绑定对应策略组。
+#!author=yuyu1025
+#!homepage={{BASE_URL}}
+#!tag=分流
+
+[Argument]
+PROXY = select, "Proxy", tag = 代理策略组, desc = 默认代理策略组名称
+AI = select, "AI", "Proxy", tag = AI 策略组, desc = AI 服务使用的策略组
+STREAMING = select, "Streaming", "Proxy", tag = 流媒体策略组, desc = 国际流媒体使用的策略组
+
+[Rule]
+# 1. 自定义直连与代理（最高优先级）
+RULE-SET,{{BASE_URL}}/loon/direct.list,DIRECT
+RULE-SET,{{BASE_URL}}/loon/proxy.list,{PROXY}
+
+# 2. AI 服务
+RULE-SET,{{BASE_URL}}/loon/ai.list,{AI}
+
+# 3. 国际流媒体（如需单独分流可改用 youtube.list / netflix.list / disney.list / tiktok.list / spotify.list）
+RULE-SET,{{BASE_URL}}/loon/streaming.list,{STREAMING}
+
+# 4. Telegram
+RULE-SET,{{BASE_URL}}/loon/telegram.list,{PROXY}
+
+# 5. 国内直连 + 内网
+RULE-SET,{{BASE_URL}}/loon/cn.list,DIRECT

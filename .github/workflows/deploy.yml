@@ -1,0 +1,70 @@
+name: Build & Deploy Routing Rules
+
+on:
+  push:
+    branches: ["main"]
+  schedule:
+    # 每天 UTC 20:00（北京时间次日 04:00）自动同步上游规则并重新编译发布
+    - cron: "0 20 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Mihomo for .mrs binary ruleset compilation
+        run: |
+          set -euo pipefail
+          TAG=$(curl -fsSL https://api.github.com/repos/MetaCubeX/mihomo/releases/latest | jq -r .tag_name)
+          echo "Latest Mihomo tag: ${TAG}"
+          URL="https://github.com/MetaCubeX/mihomo/releases/download/${TAG}/mihomo-linux-amd64-${TAG}.gz"
+          if curl -fsSL "$URL" -o mihomo.gz; then
+            gunzip -f mihomo.gz
+            chmod +x mihomo
+            ./mihomo -v
+            echo "MIHOMO_BIN=$(pwd)/mihomo" >> "$GITHUB_ENV"
+          else
+            echo "::warning::Failed to download mihomo binary, continuing without .mrs output"
+          fi
+
+      - name: Build optimized rulesets
+        env:
+          PAGES_BASE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+        run: |
+          python3 scripts/build.py --base-url "$PAGES_BASE_URL"
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

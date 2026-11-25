@@ -1,0 +1,6 @@
+# 自定义流媒体补充规则
+# 上游已涵盖 YouTube / Netflix / Disney+ / TikTok / Spotify / HBO / Hulu / Prime Video / Bahamut / BiliIntl
+
+# 如需补充小众流媒体或地区解锁域名，直接在此添加：
+# DOMAIN-SUFFIX,example.com
+DOMAIN-SUFFIX,emby.wtf

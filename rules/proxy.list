@@ -1,0 +1,8 @@
+# 自定义代理规则（高优先级，强制走代理的域名或 IP）
+# 示例：
+# DOMAIN-SUFFIX,example.com
+
+DOMAIN-SUFFIX,github.com
+DOMAIN-SUFFIX,githubusercontent.com
+DOMAIN-SUFFIX,githubassets.com
+DOMAIN-SUFFIX,github.io

@@ -1,0 +1,134 @@
+{
+  "meta": {
+    "title": "Routing Rules",
+    "description": "高效跨端分流规则集（Clash/Mihomo · Stash · Loon）",
+    "default_base_url": "https://yuyu1025.github.io/routing-rules"
+  },
+  "rulesets": [
+    {
+      "id": "direct",
+      "name": "自定义直连",
+      "category": "custom",
+      "description": "最高优先级自定义直连白名单（覆盖上游误杀）",
+      "local": ["rules/direct.list"],
+      "upstreams": []
+    },
+    {
+      "id": "proxy",
+      "name": "自定义代理",
+      "category": "custom",
+      "description": "最高优先级自定义代理名单",
+      "local": ["rules/proxy.list"],
+      "upstreams": []
+    },
+    {
+      "id": "ai",
+      "name": "AI 服务",
+      "category": "ai",
+      "description": "OpenAI / ChatGPT、Anthropic / Claude、Google Gemini、Perplexity、Cursor、Copilot 等海外 AI 服务",
+      "local": ["rules/ai.list"],
+      "upstreams": [
+        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.list",
+        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/openai.list",
+        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/anthropic.list",
+        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google-gemini.list"
+      ]
+    },
+    {
+      "id": "streaming",
+      "name": "国际流媒体（合集）",
+      "category": "streaming",
+      "description": "YouTube、Netflix、Disney+、TikTok、Spotify、HBO、Hulu、Prime Video、巴哈姆特、B站国际版合集",
+      "local": ["rules/streaming.list"],
+      "upstreams": [
+        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.list",
+        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.list",
+        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/netflix.list",
+        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/disney.list",
+        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok.list",
+        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/spotify.list",
+        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/hbo.list",
+        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/hulu.list",
+        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/primevideo.list",
+        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/bahamut.list",
+        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/biliintl.list"
+      ]
+    },
+    {
+      "id": "youtube",
+      "name": "YouTube",
+      "category": "streaming",
+      "description": "YouTube 独立分流规则",
+      "local": [],
+      "upstreams": [
+        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.list"
+      ]
+    },
+    {
+      "id": "netflix",
+      "name": "Netflix",
+      "category": "streaming",
+      "description": "Netflix 域名与 IP 独立分流规则",
+      "local": [],
+      "upstreams": [
+        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.list",
+        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/netflix.list"
+      ]
+    },
+    {
+      "id": "disney",
+      "name": "Disney+",
+      "category": "streaming",
+      "description": "Disney+ 独立分流规则",
+      "local": [],
+      "upstreams": [
+        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/disney.list"
+      ]
+    },
+    {
+      "id": "tiktok",
+      "name": "TikTok",
+      "category": "streaming",
+      "description": "TikTok 独立分流规则",
+      "local": [],
+      "upstreams": [
+        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok.list"
+      ]
+    },
+    {
+      "id": "spotify",
+      "name": "Spotify",
+      "category": "streaming",
+      "description": "Spotify 独立分流规则",
+      "local": [],
+      "upstreams": [
+        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/spotify.list"
+      ]
+    },
+    {
+      "id": "telegram",
+      "name": "Telegram",
+      "category": "service",
+      "description": "Telegram 域名与数据中心 IP 段",
+      "local": [],
+      "upstreams": [
+        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.list",
+        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.list"
+      ]
+    },
+    {
+      "id": "cn",
+      "name": "国内直连（CN + 内网）",
+      "category": "direct",
+      "description": "中国大陆域名、Apple CN、内网域名及中国大陆/私有 IP 段",
+      "local": [],
+      "upstreams": [
+        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.list",
+        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple-cn.list",
+        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.list",
+        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.list",
+        "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.list"
+      ]
+    }
+  ]
+}

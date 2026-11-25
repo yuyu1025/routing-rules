@@ -1,0 +1,76 @@
+name: 高效分流规则覆写 (AI / 流媒体 / 国内直连)
+desc: 自动构建并去重优化的分流规则集（更新时间：{{UPDATED_AT}} UTC）。请确保你的配置中存在 Proxy / AI / Streaming 策略组，或按需调整规则目标组名。
+
+rule-providers:
+  custom-direct-domain:
+    behavior: domain
+    format: yaml
+    interval: 86400
+    url: "{{BASE_URL}}/stash/direct-domain.yaml"
+  custom-direct-ip:
+    behavior: ipcidr
+    format: yaml
+    interval: 86400
+    url: "{{BASE_URL}}/stash/direct-ip.yaml"
+  custom-direct-classical:
+    behavior: classical
+    format: yaml
+    interval: 86400
+    url: "{{BASE_URL}}/stash/direct-classical.yaml"
+  custom-proxy-domain:
+    behavior: domain
+    format: yaml
+    interval: 86400
+    url: "{{BASE_URL}}/stash/proxy-domain.yaml"
+
+  ai-domain:
+    behavior: domain
+    format: yaml
+    interval: 86400
+    url: "{{BASE_URL}}/stash/ai-domain.yaml"
+
+  streaming-domain:
+    behavior: domain
+    format: yaml
+    interval: 86400
+    url: "{{BASE_URL}}/stash/streaming-domain.yaml"
+  streaming-ip:
+    behavior: ipcidr
+    format: yaml
+    interval: 86400
+    url: "{{BASE_URL}}/stash/streaming-ip.yaml"
+
+  telegram-domain:
+    behavior: domain
+    format: yaml
+    interval: 86400
+    url: "{{BASE_URL}}/stash/telegram-domain.yaml"
+  telegram-ip:
+    behavior: ipcidr
+    format: yaml
+    interval: 86400
+    url: "{{BASE_URL}}/stash/telegram-ip.yaml"
+
+  cn-domain:
+    behavior: domain
+    format: yaml
+    interval: 86400
+    url: "{{BASE_URL}}/stash/cn-domain.yaml"
+  cn-ip:
+    behavior: ipcidr
+    format: yaml
+    interval: 86400
+    url: "{{BASE_URL}}/stash/cn-ip.yaml"
+
+rules:
+  - RULE-SET,custom-direct-domain,DIRECT
+  - RULE-SET,custom-direct-classical,DIRECT
+  - RULE-SET,custom-direct-ip,DIRECT,no-resolve
+  - RULE-SET,custom-proxy-domain,Proxy
+  - RULE-SET,ai-domain,AI
+  - RULE-SET,streaming-domain,Streaming
+  - RULE-SET,streaming-ip,Streaming,no-resolve
+  - RULE-SET,telegram-domain,Proxy
+  - RULE-SET,telegram-ip,Proxy,no-resolve
+  - RULE-SET,cn-domain,DIRECT
+  - RULE-SET,cn-ip,DIRECT,no-resolve
